@@ -65,3 +65,9 @@ npm run tauri dev
 ```
 
 Tên ứng dụng và thông tin license trong sidebar được đọc từ `.env` qua `APP_NAME` và `APP_LICENSE`. Hai giá trị này được đóng gói vào frontend, nên không dùng `APP_LICENSE` làm bí mật xác thực.
+
+## Build trên GitHub Actions
+
+Mỗi lần đẩy code lên nhánh `main`, workflow [build-desktop.yml](./.github/workflows/build-desktop.yml) tạo bộ cài Windows x64 (`.exe`) và macOS cho Apple Silicon, Intel (`.dmg`). Cũng có thể chạy thủ công từ tab **Actions** → **Build desktop installers** → **Run workflow**. Sau khi cả ba job hoàn tất, tải file ZIP tương ứng trong mục **Artifacts** của lần chạy đó và giải nén để lấy bộ cài.
+
+Các bản macOS hiện chưa được ký bằng chứng chỉ Developer ID hoặc notarize; để phát hành công khai không bị cảnh báo bảo mật, cần bổ sung bước ký và notarize. Bộ cài Windows hiện chưa được ký số.
