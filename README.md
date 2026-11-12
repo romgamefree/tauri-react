@@ -70,4 +70,6 @@ Tên ứng dụng và thông tin license trong sidebar được đọc từ `.en
 
 Mỗi lần đẩy code lên nhánh `main`, workflow [build-desktop.yml](./.github/workflows/build-desktop.yml) tạo bộ cài Windows x64 và x86 32-bit (`.exe`), cùng macOS cho Apple Silicon và Intel (`.dmg`). Cũng có thể chạy thủ công từ tab **Actions** → **Build desktop installers** → **Run workflow**. Sau khi các job hoàn tất, tải file ZIP tương ứng trong mục **Artifacts** của lần chạy đó và giải nén để lấy bộ cài.
 
+Trên Windows, xem **Settings → System → About → System type**: nếu máy ghi **64-bit operating system**, tải `DrivePro-Windows-64-bit-x64`; nếu ghi **32-bit operating system**, tải `DrivePro-Windows-32-bit-x86`.
+
 Các bản macOS được ký ad-hoc để tránh lỗi ứng dụng bị báo hỏng khi tải về. Chúng chưa được ký bằng chứng chỉ Developer ID hoặc notarize; để phát hành công khai không bị cảnh báo bảo mật, cần bổ sung bước ký và notarize. Bộ cài Windows hiện chưa được ký số.

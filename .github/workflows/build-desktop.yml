@@ -26,16 +26,16 @@ jobs:
             target: x86_64-apple-darwin
             bundle: dmg
             artifact: DrivePro-macOS-Intel
-          - name: Windows x64
+          - name: Windows x64 (64-bit)
             os: windows-latest
             target: x86_64-pc-windows-msvc
             bundle: nsis
-            artifact: DrivePro-Windows-x64
-          - name: Windows x86
+            artifact: DrivePro-Windows-64-bit-x64
+          - name: Windows x86 (32-bit)
             os: windows-latest
             target: i686-pc-windows-msvc
             bundle: nsis
-            artifact: DrivePro-Windows-x86
+            artifact: DrivePro-Windows-32-bit-x86
 
     steps:
       - uses: actions/checkout@v4
