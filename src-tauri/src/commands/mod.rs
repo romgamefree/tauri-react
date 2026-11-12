@@ -1,30 +1,25 @@
+pub mod course_commands;
+pub mod seed_commands;
 pub mod student_commands;
 pub mod teacher_commands;
 pub mod vehicle_commands;
-pub mod course_commands;
-pub mod seed_commands;
 
 use rusqlite::Connection;
-use serde::Serialize;
 use tauri::State;
 
-use crate::{database::Database, error::{AppError, AppResult}};
+use crate::{database::sqlite::SqliteDatabase, error::AppResult};
 
-pub fn run_command<T: Serialize>(
-    state: State<'_, Database>,
+pub fn run_command<T>(
+    state: State<'_, SqliteDatabase>,
     entity: &str,
     operation: &str,
-    action: impl FnOnce(&mut Connection) -> AppResult<Vec<T>>,
-) -> Result<Vec<T>, String> {
-    let result = (|| {
-        let mut conn = state.0.lock()
-            .map_err(|error| AppError::DatabaseLock(error.to_string()))?;
-        action(&mut conn)
-    })();
+    action: impl FnOnce(&mut Connection) -> AppResult<T>,
+) -> Result<T, String> {
+    let result = state.with_connection(action);
     match result {
-        Ok(items) => {
-            tracing::debug!(entity, operation, count = items.len(), "command completed");
-            Ok(items)
+        Ok(value) => {
+            tracing::debug!(entity, operation, "command completed");
+            Ok(value)
         }
         Err(error) => {
             tracing::warn!(entity, operation, error = %error, "command failed");

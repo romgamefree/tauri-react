@@ -1,19 +1,21 @@
-use rusqlite::{params, Connection, Transaction};
+use rusqlite::{Connection, Transaction, params};
 
 use crate::{error::AppResult, models::teacher::Teacher};
 
 pub fn list(conn: &Connection) -> AppResult<Vec<Teacher>> {
     let mut statement = conn.prepare("SELECT id, code, full_name, license_class, license_expiry, phone, status, updated_at FROM teachers ORDER BY position DESC")?;
-    let rows = statement.query_map([], |row| Ok(Teacher {
-        id: row.get(0)?,
-        code: row.get(1)?,
-        full_name: row.get(2)?,
-        license_class: row.get(3)?,
-        license_expiry: row.get(4)?,
-        phone: row.get(5)?,
-        status: row.get(6)?,
-        updated_at: row.get(7)?,
-    }))?;
+    let rows = statement.query_map([], |row| {
+        Ok(Teacher {
+            id: row.get(0)?,
+            code: row.get(1)?,
+            full_name: row.get(2)?,
+            license_class: row.get(3)?,
+            license_expiry: row.get(4)?,
+            phone: row.get(5)?,
+            status: row.get(6)?,
+            updated_at: row.get(7)?,
+        })
+    })?;
     Ok(rows.collect::<Result<Vec<_>, _>>()?)
 }
 

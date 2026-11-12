@@ -27,7 +27,12 @@ pub struct SeedResult {
 
 pub fn seed(conn: &mut Connection, data: SeedData) -> AppResult<SeedResult> {
     let tx = conn.transaction()?;
-    let mut result = SeedResult { students: 0, teachers: 0, vehicles: 0, courses: 0 };
+    let mut result = SeedResult {
+        students: 0,
+        teachers: 0,
+        vehicles: 0,
+        courses: 0,
+    };
     for item in data.students.iter().rev() {
         student_service::validate(item)?;
         result.students += student_repository::insert_missing(&tx, item)?;

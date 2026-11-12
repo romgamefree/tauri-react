@@ -4,7 +4,6 @@ mod error;
 mod models;
 mod repositories;
 mod services;
-mod sql_server;
 
 use tauri::Manager;
 
@@ -19,7 +18,7 @@ pub fn run() {
 
     tauri::Builder::default()
         .setup(|app| {
-            app.manage(database::open(app.handle())?);
+            app.manage(database::sqlite::open(app.handle())?);
             tracing::info!("SQLite database initialized");
             Ok(())
         })
@@ -38,9 +37,9 @@ pub fn run() {
             commands::course_commands::save_course,
             commands::course_commands::delete_courses,
             commands::seed_commands::seed_database,
-            sql_server::load_sql_server_connection,
-            sql_server::save_sql_server_connection,
-            sql_server::test_sql_server_connection
+            database::sql_server::commands::load_sql_server_connection,
+            database::sql_server::commands::save_sql_server_connection,
+            database::sql_server::commands::test_sql_server_connection
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

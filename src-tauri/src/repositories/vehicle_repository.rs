@@ -1,18 +1,20 @@
-use rusqlite::{params, Connection, Transaction};
+use rusqlite::{Connection, Transaction, params};
 
 use crate::{error::AppResult, models::vehicle::Vehicle};
 
 pub fn list(conn: &Connection) -> AppResult<Vec<Vehicle>> {
     let mut statement = conn.prepare("SELECT id, plate, model, type, inspection_expiry, status, updated_at FROM vehicles ORDER BY position DESC")?;
-    let rows = statement.query_map([], |row| Ok(Vehicle {
-        id: row.get(0)?,
-        plate: row.get(1)?,
-        model: row.get(2)?,
-        vehicle_type: row.get(3)?,
-        inspection_expiry: row.get(4)?,
-        status: row.get(5)?,
-        updated_at: row.get(6)?,
-    }))?;
+    let rows = statement.query_map([], |row| {
+        Ok(Vehicle {
+            id: row.get(0)?,
+            plate: row.get(1)?,
+            model: row.get(2)?,
+            vehicle_type: row.get(3)?,
+            inspection_expiry: row.get(4)?,
+            status: row.get(5)?,
+            updated_at: row.get(6)?,
+        })
+    })?;
     Ok(rows.collect::<Result<Vec<_>, _>>()?)
 }
 
