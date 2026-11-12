@@ -60,7 +60,13 @@ jobs:
 
       - name: Verify macOS app signature
         if: runner.os == 'macOS'
-        run: codesign --verify --deep --strict --verbose=2 "src-tauri/target/${{ matrix.target }}/release/bundle/macos/DrivePro.app"
+        run: |
+          dmg=(src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg)
+          mountpoint="$RUNNER_TEMP/drivepro-dmg"
+          mkdir -p "$mountpoint"
+          hdiutil attach "${dmg[0]}" -mountpoint "$mountpoint" -nobrowse -quiet
+          trap 'hdiutil detach "$mountpoint" -quiet' EXIT
+          codesign --verify --deep --strict --verbose=2 "$mountpoint/DrivePro.app"
 
       - name: Build Windows installer
         if: runner.os == 'Windows'
