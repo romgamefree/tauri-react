@@ -6,6 +6,7 @@ import { OverviewPage } from "@/pages/overview-page";
 import { StudentsPage } from "@/pages/students-page";
 import { TeachersPage } from "@/pages/teachers-page";
 import { VehiclesPage } from "@/pages/vehicles-page";
+import { SqlServerPage } from "@/pages/sql-server-page";
 import Layout from "@/layouts/app-layout";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       {activePage === "teachers" && <TeachersPage />}
       {activePage === "vehicles" && <VehiclesPage />}
       {activePage === "courses" && <CoursesPage />}
+      {activePage === "sqlServer" && <SqlServerPage />}
     </Layout>
   );
 }

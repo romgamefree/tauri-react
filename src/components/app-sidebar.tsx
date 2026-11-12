@@ -1,10 +1,14 @@
+import { useState } from "react";
 import {
   BookOpenCheck,
   CarFront,
+  ChevronDown,
+  Database,
   GraduationCap,
   Home,
   LayoutGrid,
   Moon,
+  Settings2,
   Sun,
   UsersRound,
 } from "lucide-react";
@@ -19,6 +23,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -38,8 +45,9 @@ const appName = import.meta.env.APP_NAME || "DrivePro";
 const appLicense = import.meta.env.APP_LICENSE || "";
 
 export function AppSidebar({ activePage, onNavigate }: { activePage: PageKey; onNavigate: (page: PageKey) => void }) {
-  const { isMobile, setOpenMobile } = useSidebar();
+  const { isMobile, setOpenMobile, state, setOpen } = useSidebar();
   const { dark, toggleTheme } = useThemeStore();
+  const [settingsOpen, setSettingsOpen] = useState(activePage === "sqlServer");
 
   function closeMobileSidebar() {
     if (isMobile) setOpenMobile(false);
@@ -94,6 +102,40 @@ export function AppSidebar({ activePage, onNavigate }: { activePage: PageKey; on
 
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => {
+                if (!isMobile && state === "collapsed") {
+                  setOpen(true);
+                  setSettingsOpen(true);
+                } else {
+                  setSettingsOpen((current) => !current);
+                }
+              }}
+              isActive={activePage === "sqlServer"}
+              tooltip="Cài đặt"
+              aria-expanded={settingsOpen}
+              aria-controls="settings-submenu"
+            >
+              <Settings2 />
+              <span>Cài đặt</span>
+              <ChevronDown className={`ml-auto transition-transform group-data-[collapsible=icon]:hidden ${settingsOpen ? "rotate-180" : ""}`} />
+            </SidebarMenuButton>
+            {settingsOpen && (
+              <SidebarMenuSub id="settings-submenu">
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton
+                    render={<button type="button" />}
+                    onClick={() => { onNavigate("sqlServer"); closeMobileSidebar(); }}
+                    isActive={activePage === "sqlServer"}
+                  >
+                    <Database />
+                    <span>Kết nối SQL Server</span>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              </SidebarMenuSub>
+            )}
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton onClick={toggleTheme} tooltip={dark ? "Giao diện sáng" : "Giao diện tối"}>
               {dark ? <Sun /> : <Moon />}

@@ -23,7 +23,7 @@ export default function Layout({ children, activePage, onNavigate }: {
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-3 border-b px-4">
           <SidebarTrigger />
-          <span className="text-sm font-medium">{activePage === "overview" ? "Tổng quan" : entities[activePage].title}</span>
+          <span className="text-sm font-medium">{activePage === "overview" ? "Tổng quan" : activePage === "sqlServer" ? "Kết nối SQL Server" : entities[activePage].title}</span>
         </header>
         {children}
       </SidebarInset>
